@@ -22,12 +22,12 @@ model:
     box_loss: giou
     cls_weight: 1.0
     box_weight: 1.0
-    min_size: null         # 800 decidido; 640 si no cabe en la GPU
-    max_size: null         # 1333 decidido
+    min_size: null         # regla del grupo: 800; 640 solo si a 800 no cabe ni batch 1 en 4 GB
+    max_size: null         # 1333 (con 640: 1066, misma proporcion)
     nms_iou: 0.6
 training:
-  batch: null              # 16 decidido; pendiente de la medicion de GPU
-  accumulate: null
+  batch: null              # mayor batch que quepa entre 1, 2, 4 y 8
+  accumulate: null         # 16 / batch: lote efectivo 16 con lr 0.01
   workers: 4
   grad_clip: 0
   patience: 0
