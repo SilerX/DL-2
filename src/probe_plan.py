@@ -1,6 +1,7 @@
 """Mide VRAM y velocidad del plan de transfer learning: pesos COCO y congelamiento reales.
 
 Uso: probe_plan.py --data data/smoke --out artifacts/gpu_probe_plan.csv
+Un caso: probe_plan.py --one fcos <lado corto> <lado maximo> <batch>
 """
 import argparse
 import csv
@@ -34,6 +35,36 @@ def probe_frcnn(data, stages, size, limit, batch):
     model.configure_trainable({"trainable_backbone_stages": stages, "train_fpn": True, "train_rpn": True})
     model.train()
     optimizer = torch.optim.SGD([p for p in model.parameters() if p.requires_grad], lr=1e-4)
+    loader = DataLoader(DetectionDataset(data, "train"), batch_size=batch, shuffle=True, collate_fn=collate)
+    torch.cuda.reset_peak_memory_stats()
+    done, start = 0, None
+    while done < ITERATIONS:
+        for images, targets in loader:
+            if done == SKIP_FIRST:
+                torch.cuda.synchronize()
+                start = time.perf_counter()
+            loss = sum(model([i.cuda() for i in images], [{k: v.cuda() for k, v in t.items()} for t in targets]).values())
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            done += 1
+            if done == ITERATIONS:
+                break
+    torch.cuda.synchronize()
+    seconds = (time.perf_counter() - start) / ((ITERATIONS - SKIP_FIRST) * batch)
+    return seconds, torch.cuda.max_memory_reserved() / 1024**2
+
+
+def probe_fcos(data, size, limit, batch):
+    """FCOS de configs/cnn_scratch.yaml con la resolucion y el batch dados; entrena completo."""
+    import yaml
+
+    nc = len(json.loads((data / "annotations" / "train.json").read_text())["categories"])
+    cfg = yaml.safe_load((ROOT / "configs" / "cnn_scratch.yaml").read_text(encoding="utf-8"))["model"]
+    cfg["params"].update(min_size=size, max_size=limit)
+    model = build_model(cfg, nc).cuda()
+    model.train()
+    optimizer = torch.optim.SGD(model.parameters(), lr=1e-4, momentum=0.9)
     loader = DataLoader(DetectionDataset(data, "train"), batch_size=batch, shuffle=True, collate_fn=collate)
     torch.cuda.reset_peak_memory_stats()
     done, start = 0, None
@@ -106,7 +137,8 @@ def main():
     if args.one:
         kind, *values = args.one
         values = list(map(int, values))
-        seconds, peak = probe_frcnn(data, *values) if kind == "frcnn" else probe_yolo(data, *values)
+        probe = {"frcnn": probe_frcnn, "fcos": probe_fcos, "yolo": probe_yolo}[kind]
+        seconds, peak = probe(data, *values)
         print("RESULT " + json.dumps({"s_per_image": seconds, "peak_mb": peak}))
         return
 

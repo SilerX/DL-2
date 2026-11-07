@@ -1,7 +1,13 @@
-"""CNN propia: detector FCOS ligero (anchor-free) con perdida Focal + Smooth L1, entrenado desde cero.
+"""CNN propia: detector FCOS (anchor-free) entrenado desde cero.
 
-Diseno del grupo: FCOS, Focal y Smooth L1. Todas las medidas (canales, niveles, rangos, pesos)
-entran desde la configuracion. Interfaz definida en torch_models.py.
+Diseno del grupo. Todas las medidas (backbone, canales, niveles, rangos, perdidas, pesos) entran
+desde la configuracion. Interfaz definida en torch_models.py.
+
+Backbones:
+- block plain | residual: cada etapa reduce a la mitad con una convolucion de paso 2 (strides 2, 4, 8, ...).
+- block bottleneck: ResNet (tallo 7x7 + max pool, bloques bottleneck de expansion 4, strides 4, 8, 16, 32);
+  con stage_blocks [3, 4, 6, 3] y stage_channels [256, 512, 1024, 2048] es ResNet-50. Inicializacion He.
+Perdida de caja: smooth_l1 sobre ltrb, iou (-ln IoU, FCOS original) o giou (1 - GIoU).
 """
 import torch
 import torch.nn as nn
@@ -14,18 +20,19 @@ PRIOR_PROBABILITY = 0.01  # inicializacion de la clasificacion de FCOS/RetinaNet
 TOPK_PER_LEVEL = 1000
 
 
-def make_norm(kind, channels):
+def norm_layer(kind, groups=8):
+    """Devuelve una funcion canales -> capa de normalizacion."""
     if kind == "batch":
-        return nn.BatchNorm2d(channels)
+        return nn.BatchNorm2d
     if kind == "group":
-        return nn.GroupNorm(min(8, channels), channels)
+        return lambda channels: nn.GroupNorm(min(groups, channels), channels)
     raise ValueError(f"norm desconocida: {kind}")
 
 
 def conv_block(in_channels, out_channels, norm, stride=1):
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, 3, stride, 1, bias=False),
-        make_norm(norm, out_channels),
+        norm(out_channels),
         nn.ReLU(inplace=True),
     )
 
@@ -36,11 +43,74 @@ class ResidualBlock(nn.Module):
         self.body = nn.Sequential(
             conv_block(channels, channels, norm),
             nn.Conv2d(channels, channels, 3, 1, 1, bias=False),
-            make_norm(norm, channels),
+            norm(channels),
         )
 
     def forward(self, x):
         return F.relu(x + self.body(x), inplace=True)
+
+
+class Bottleneck(nn.Module):
+    """Bloque de ResNet-50: 1x1 reduce, 3x3 (con el paso), 1x1 expande; atajo con proyeccion si cambia la forma."""
+
+    def __init__(self, in_channels, out_channels, stride, norm):
+        super().__init__()
+        width = out_channels // 4
+        self.body = nn.Sequential(
+            nn.Conv2d(in_channels, width, 1, bias=False),
+            norm(width),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(width, width, 3, stride, 1, bias=False),
+            norm(width),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(width, out_channels, 1, bias=False),
+            norm(out_channels),
+        )
+        self.shortcut = None
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, 1, stride, bias=False), norm(out_channels)
+            )
+
+    def forward(self, x):
+        identity = x if self.shortcut is None else self.shortcut(x)
+        return F.relu(identity + self.body(x), inplace=True)
+
+
+class ResNetBackbone(nn.Module):
+    STEM_CHANNELS = 64
+
+    def __init__(self, stage_channels, stage_blocks, norm):
+        super().__init__()
+        self.stem = nn.Sequential(
+            nn.Conv2d(3, self.STEM_CHANNELS, 7, 2, 3, bias=False),
+            norm(self.STEM_CHANNELS),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2, 1),
+        )
+        self.stages = nn.ModuleList()
+        previous = self.STEM_CHANNELS
+        for i, (channels, blocks) in enumerate(zip(stage_channels, stage_blocks)):
+            stride = 1 if i == 0 else 2
+            layers = [Bottleneck(previous, channels, stride, norm)]
+            layers += [Bottleneck(channels, channels, 1, norm) for _ in range(blocks - 1)]
+            self.stages.append(nn.Sequential(*layers))
+            previous = channels
+        self.strides = [2 ** (i + 2) for i in range(len(stage_channels))]
+        for m in self.modules():  # inicializacion He
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
+            elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
+                nn.init.ones_(m.weight)
+                nn.init.zeros_(m.bias)
+
+    def forward(self, x):
+        x = self.stem(x)
+        features = []
+        for stage in self.stages:
+            x = stage(x)
+            features.append(x)
+        return features
 
 
 class Backbone(nn.Module):
@@ -48,6 +118,7 @@ class Backbone(nn.Module):
 
     def __init__(self, stage_channels, stage_blocks, block, norm):
         super().__init__()
+        self.strides = [2 ** (i + 1) for i in range(len(stage_channels))]
         self.stages = nn.ModuleList()
         previous = 3
         for channels, blocks in zip(stage_channels, stage_blocks):
@@ -166,6 +237,23 @@ def assign_targets(points, boxes, labels, stride, size_range, center_radius, nc)
     return target_labels, target_ltrb
 
 
+def iou_loss(pred, target, kind):
+    """pred y target en ltrb respecto del mismo punto; la IoU no depende de la unidad."""
+    pred_area = (pred[:, 0] + pred[:, 2]) * (pred[:, 1] + pred[:, 3])
+    target_area = (target[:, 0] + target[:, 2]) * (target[:, 1] + target[:, 3])
+    w = torch.min(pred[:, 0], target[:, 0]) + torch.min(pred[:, 2], target[:, 2])
+    h = torch.min(pred[:, 1], target[:, 1]) + torch.min(pred[:, 3], target[:, 3])
+    intersection = w * h
+    union = pred_area + target_area - intersection
+    iou = (intersection + 1.0e-7) / (union + 1.0e-7)
+    if kind == "iou":
+        return -torch.log(iou.clamp(min=1.0e-7))
+    enclosing = (torch.max(pred[:, 0], target[:, 0]) + torch.max(pred[:, 2], target[:, 2])) * (
+        torch.max(pred[:, 1], target[:, 1]) + torch.max(pred[:, 3], target[:, 3])
+    )
+    return 1 - (iou - (enclosing - union) / enclosing.clamp(min=1.0e-7))
+
+
 def centerness_target(ltrb):
     lr, tb = ltrb[:, [0, 2]], ltrb[:, [1, 3]]
     ratio = (lr.min(dim=1).values / lr.max(dim=1).values) * (tb.min(dim=1).values / tb.max(dim=1).values)
@@ -189,20 +277,32 @@ class CustomDetector(nn.Module):
         use_centerness,
         focal_alpha,
         focal_gamma,
-        smooth_l1_beta,
         cls_weight,
         box_weight,
         min_size,
         max_size,
         nms_iou,
+        norm_groups=8,
+        box_loss="smooth_l1",
+        smooth_l1_beta=None,
     ):
         super().__init__()
         self.nc = nc
         self.fpn_from_stage = fpn_from_stage
         selected = stage_channels[fpn_from_stage:]
         n_levels = len(selected) + fpn_extra_levels
-        # El stride de la etapa i es 2^(i+1): cada etapa reduce a la mitad
-        self.strides = [2 ** (fpn_from_stage + 1 + i) for i in range(n_levels)]
+        norm = norm_layer(norm, norm_groups)
+        if block == "bottleneck":
+            self.backbone = ResNetBackbone(stage_channels, stage_blocks, norm)
+        else:
+            self.backbone = Backbone(stage_channels, stage_blocks, block, norm)
+        first = self.backbone.strides[fpn_from_stage]
+        self.strides = [first * 2**i for i in range(n_levels)]  # cada nivel extra reduce a la mitad
+        if box_loss not in ("smooth_l1", "iou", "giou"):
+            raise ValueError(f"box_loss desconocida: {box_loss}")
+        if box_loss == "smooth_l1" and smooth_l1_beta is None:
+            raise ValueError("smooth_l1 requiere smooth_l1_beta")
+        self.box_loss = box_loss
         if len(size_ranges) != n_levels:
             raise ValueError(f"size_ranges debe tener {n_levels} rangos, uno por nivel")
         self.size_ranges = size_ranges
@@ -215,7 +315,6 @@ class CustomDetector(nn.Module):
         self.score_threshold = 0.05
 
         self.transform = GeneralizedRCNNTransform(min_size, max_size, IMAGENET_MEAN, IMAGENET_STD)
-        self.backbone = Backbone(stage_channels, stage_blocks, block, norm)
         self.fpn = FPN(selected, fpn_channels, fpn_extra_levels, norm)
         self.head = Head(fpn_channels, nc, head_convs, n_levels, norm, use_centerness)
 
@@ -260,7 +359,10 @@ class CustomDetector(nn.Module):
             / n_positive
         }
         if positive.any():
-            box = F.smooth_l1_loss(reg_preds[positive], ltrb[positive], beta=self.smooth_l1_beta, reduction="sum")
+            if self.box_loss == "smooth_l1":
+                box = F.smooth_l1_loss(reg_preds[positive], ltrb[positive], beta=self.smooth_l1_beta, reduction="sum")
+            else:
+                box = iou_loss(reg_preds[positive], ltrb[positive], self.box_loss).sum()
         else:
             box = reg_preds.sum() * 0.0
         losses["box"] = self.box_weight * box / n_positive

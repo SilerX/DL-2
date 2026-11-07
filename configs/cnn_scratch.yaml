@@ -1,49 +1,47 @@
-# CNN propia desde cero: FCOS ligero con Focal + Smooth L1. Cada null es una decision pendiente.
+# CNN propia desde cero: FCOS con backbone ResNet-50 (He init). Cada null es una decision pendiente.
 name: cnn_scratch
 data: data/fjordfish
 seed: 0
 model:
   kind: custom_cnn
   params:
-    stage_channels: null   # canales por etapa; cada etapa reduce a la mitad, ej. largo 5 llega a stride 32
-    stage_blocks: null     # bloques por etapa
-    block: null            # plain | residual
-    norm: null             # batch | group
-    fpn_channels: null
-    fpn_from_stage: null   # indice de la primera etapa usada: 2 equivale a stride 8
-    fpn_extra_levels: null # niveles sobre la ultima etapa
-    head_convs: null       # convoluciones en cada torre de la cabeza
-    size_ranges: null      # rango de tamanio por nivel, ej. [[0, 64], [64, 128], ...]
-    center_radius: null    # 0 = toda la caja; >0 = muestreo central en unidades de stride
-    use_centerness: null
-    focal_alpha: null
-    focal_gamma: null
-    smooth_l1_beta: null
-    cls_weight: null
-    box_weight: null
-    min_size: null         # resolucion de entrada
-    max_size: null
-    nms_iou: null
+    stage_channels: [256, 512, 1024, 2048]  # salidas de C2-C5 de ResNet-50
+    stage_blocks: [3, 4, 6, 3]
+    block: bottleneck
+    norm: group
+    norm_groups: 32
+    fpn_channels: 256
+    fpn_from_stage: 1      # C3 (stride 8)
+    fpn_extra_levels: 2    # P6 y P7
+    head_convs: 4          # ramas: clasificacion, caja y centerness
+    size_ranges: [[0, 64], [64, 128], [128, 256], [256, 512], [512, 100000]]
+    center_radius: 0       # toda la caja
+    use_centerness: true
+    focal_alpha: 0.25
+    focal_gamma: 2.0
+    box_loss: giou
+    cls_weight: 1.0
+    box_weight: 1.0
+    min_size: null         # 800 decidido; 640 si no cabe en la GPU
+    max_size: null         # 1333 decidido
+    nms_iou: 0.6
 training:
-  batch: null
+  batch: null              # 16 decidido; pendiente de la medicion de GPU
   accumulate: null
   workers: 4
-  grad_clip: null    # 0 = sin recorte
-  patience: null     # 0 = sin detencion temprana
+  grad_clip: 0
+  patience: 0
   augment:
-    hflip_p: null
-    vflip_p: null
-    color_jitter: null  # [brillo, contraste, saturacion, tono], o []
-    zoom_out_p: null
-    zoom_out_range: null  # [min, max]; borrar esta linea si zoom_out_p es 0
-    iou_crop_p: null
+    hflip_p: 0.5
 phases:
-  - epochs: null
+  - epochs: 24
     trainable_backbone_stages: 0  # sin efecto: la CNN propia entrena completa
     train_fpn: true
     train_rpn: true
-    optimizer: null     # sgd | adamw
-    lr: null
-    momentum: null      # solo sgd; borrar esta linea con adamw
-    weight_decay: null
-    scheduler: null     # none | cosine | multistep (requiere milestones y gamma)
+    optimizer: sgd
+    lr: 0.01
+    momentum: 0.9
+    weight_decay: 0.0001
+    scheduler: cosine
+    warmup_iters: 500      # pasos del optimizador
+    warmup_factor: 0.333

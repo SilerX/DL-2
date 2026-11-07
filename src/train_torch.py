@@ -6,6 +6,7 @@ entrenar primero la cabeza y luego hacer fine-tuning.
 """
 import argparse
 import csv
+import math
 import time
 from pathlib import Path
 
@@ -28,15 +29,29 @@ def build_optimizer(model, phase):
 
 
 def build_scheduler(optimizer, phase, steps_per_epoch):
+    """Factor del lr por paso del optimizador: scheduler de la fase por warmup lineal opcional.
+
+    warmup_iters (opcional, 0 por defecto) sube el factor de warmup_factor a 1 en esos pasos.
+    """
     kind = phase["scheduler"]
+    total = phase["epochs"] * steps_per_epoch
     if kind == "none":
-        return torch.optim.lr_scheduler.LambdaLR(optimizer, lambda _: 1.0)
-    if kind == "cosine":
-        return torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, phase["epochs"] * steps_per_epoch)
-    if kind == "multistep":
+        schedule = lambda it: 1.0
+    elif kind == "cosine":
+        schedule = lambda it: 0.5 * (1 + math.cos(math.pi * min(it, total) / total))
+    elif kind == "multistep":
         milestones = [m * steps_per_epoch for m in phase["milestones"]]
-        return torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones, gamma=phase["gamma"])
-    raise ValueError(f"scheduler desconocido: {kind}")
+        schedule = lambda it: phase["gamma"] ** sum(it >= m for m in milestones)
+    else:
+        raise ValueError(f"scheduler desconocido: {kind}")
+    warmup_iters = phase.get("warmup_iters", 0)
+    warmup_factor = phase.get("warmup_factor", 1.0 / 3)
+
+    def factor(it):
+        warm = warmup_factor + (1 - warmup_factor) * it / warmup_iters if it < warmup_iters else 1.0
+        return warm * schedule(it)
+
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, factor)
 
 
 @torch.inference_mode()
