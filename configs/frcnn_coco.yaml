@@ -1,4 +1,4 @@
-# Faster R-CNN con pesos COCO. Cada null es una decision pendiente.
+# Faster R-CNN con pesos COCO.
 name: frcnn_coco
 data: data/fjordfish
 seed: 0
@@ -13,34 +13,33 @@ training:
   batch: 2          # batch 4 no cabe en 4 GB a 800/1333
   accumulate: 2      # paso del optimizador con 4 imagenes
   workers: 4
-  grad_clip: null    # 0 = sin recorte
+  grad_clip: 10      # norma maxima del gradiente; 0 = sin recorte
   patience: 4        # por fase; 0 = sin detencion temprana
   augment:
-    hflip_p: null
-    vflip_p: null
-    color_jitter: null  # [brillo, contraste, saturacion, tono], o []
-    zoom_out_p: null
-    zoom_out_range: null  # [min, max]; borrar esta linea si zoom_out_p es 0
-    iou_crop_p: null
+    hflip_p: 0.5
+    vflip_p: 0
+    color_jitter: [0.2, 0.2, 0.2, 0]  # [brillo, contraste, saturacion, tono]
+    zoom_out_p: 0
+    iou_crop_p: 0
 # trainable_backbone_stages cuenta desde la etapa mas profunda: 0 = congelado, 1 = layer4, 2 = layer4 y layer3
 phases:
   # Fase 1: backbone congelado y cabeza nueva
   - epochs: 6
     trainable_backbone_stages: 0
-    train_fpn: null
-    train_rpn: null
+    train_fpn: true
+    train_rpn: true
     optimizer: sgd
     lr: 0.005
-    momentum: null
-    weight_decay: null
-    scheduler: null     # none | cosine | multistep (requiere milestones y gamma)
+    momentum: 0.9
+    weight_decay: 0.0001
+    scheduler: cosine
   # Fase 2: descongelar las ultimas capas con lr bajo
   - epochs: 14
     trainable_backbone_stages: 2   # layer4 y layer3
-    train_fpn: null
-    train_rpn: null
+    train_fpn: true
+    train_rpn: true
     optimizer: sgd
     lr: 0.0005
-    momentum: null
-    weight_decay: null
-    scheduler: null
+    momentum: 0.9
+    weight_decay: 0.0001
+    scheduler: cosine
