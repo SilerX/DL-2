@@ -1,0 +1,48 @@
+# Decision del grupo: clases con 50 cajas o mas se mantienen; las demas se agrupan por tipo de organismo.
+# Conteos sobre train + val originales. sharks_unknown y unknown no tienen ninguna caja.
+names:
+  - ballan
+  - corkwing_female
+  - corkwing_male
+  - goldsinny
+  - rock_cook
+  - labrids_unknown
+  - cod
+  - cod_yoy
+  - pollack
+  - whiting
+  - gadines_unknown
+  - spiny_dogfish
+  - brown_crab
+  - two_spot_goby
+  - otras_peces
+  - otras_crustaceos
+map:
+  ballan: ballan                     # 93
+  corkwing_female: corkwing_female   # 456
+  corkwing_male: corkwing_male       # 1215
+  goldsinny: goldsinny               # 1433
+  rock_cook: rock_cook               # 152
+  labrids_unknown: labrids_unknown   # 333
+  cod: cod                           # 811
+  cod_yoy: cod_yoy                   # 181
+  pollack: pollack                   # 149
+  whiting: whiting                   # 101
+  gadines_unknown: gadines_unknown   # 200
+  spiny_dogfish: spiny_dogfish       # 684
+  brown_crab: brown_crab             # 190
+  two_spot_goby: two_spot_goby       # 113
+  cuckoo_female: otras_peces         # 47
+  cuckoo_male: otras_peces           # 31
+  haddock: otras_peces               # 7
+  poor_cod: otras_peces              # 22
+  saithe: otras_peces                # 39
+  ling: otras_peces                  # 30
+  black_goby: otras_peces            # 1
+  sand_goby: otras_peces             # 3
+  sharks_unknown: otras_peces        # 0
+  green_crab: otras_crustaceos       # 38
+  hermit: otras_crustaceos           # 15
+  lobster: otras_crustaceos          # 1
+  decapods_unknown: otras_crustaceos # 5
+  unknown: null                      # 0, sin organismo identificable

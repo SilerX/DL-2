@@ -1,0 +1,19 @@
+[
+ {
+  "phase": 0,
+  "groups": {
+   "backbone": {
+    "params": 342864,
+    "trainable": 342864
+   },
+   "fpn": {
+    "params": 34080,
+    "trainable": 34080
+   },
+   "head": {
+    "params": 28100,
+    "trainable": 28100
+   }
+  }
+ }
+]

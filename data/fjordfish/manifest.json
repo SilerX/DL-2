@@ -1,0 +1,91 @@
+{
+ "args": {
+  "root": "D:\\Utilities\\Escritorio\\Deeplearning\\FjordFish\\FjordFish",
+  "out": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\data\\fjordfish",
+  "cache": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\data\\cache_1333",
+  "strategy": "regroup",
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "test_frac": 0.1,
+  "duplicates": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\artifacts\\audit\\final\\duplicate_groups.json",
+  "class_map": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\configs\\classes.yaml",
+  "max_side": 1333,
+  "seed": 0,
+  "limit": null
+ },
+ "labels_moved_to_match_image": [
+  "2515"
+ ],
+ "leakage_by_groups": {
+  "groups_crossing_splits": 0,
+  "images_in_them": 0
+ },
+ "splits": {
+  "train": {
+   "images": 2401,
+   "boxes": 5185,
+   "per_class": {
+    "ballan": 75,
+    "corkwing_female": 365,
+    "corkwing_male": 939,
+    "goldsinny": 1128,
+    "rock_cook": 120,
+    "labrids_unknown": 267,
+    "cod": 754,
+    "cod_yoy": 145,
+    "pollack": 119,
+    "whiting": 80,
+    "gadines_unknown": 175,
+    "spiny_dogfish": 594,
+    "brown_crab": 142,
+    "two_spot_goby": 92,
+    "otras_peces": 144,
+    "otras_crustaceos": 46
+   }
+  },
+  "val": {
+   "images": 301,
+   "boxes": 550,
+   "per_class": {
+    "ballan": 9,
+    "corkwing_female": 45,
+    "corkwing_male": 138,
+    "goldsinny": 114,
+    "rock_cook": 14,
+    "labrids_unknown": 33,
+    "cod": 27,
+    "cod_yoy": 18,
+    "pollack": 15,
+    "whiting": 12,
+    "gadines_unknown": 12,
+    "spiny_dogfish": 45,
+    "brown_crab": 36,
+    "two_spot_goby": 10,
+    "otras_peces": 18,
+    "otras_crustaceos": 4
+   }
+  },
+  "test": {
+   "images": 300,
+   "boxes": 615,
+   "per_class": {
+    "ballan": 9,
+    "corkwing_female": 46,
+    "corkwing_male": 138,
+    "goldsinny": 191,
+    "rock_cook": 18,
+    "labrids_unknown": 33,
+    "cod": 30,
+    "cod_yoy": 18,
+    "pollack": 15,
+    "whiting": 9,
+    "gadines_unknown": 13,
+    "spiny_dogfish": 45,
+    "brown_crab": 12,
+    "two_spot_goby": 11,
+    "otras_peces": 18,
+    "otras_crustaceos": 9
+   }
+  }
+ }
+}

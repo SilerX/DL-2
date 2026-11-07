@@ -1,0 +1,4 @@
+﻿Modelo,mAP@0.5:0.95,mAP@0.5,mAP@0.75,mAP pequeños,mAP medianos,mAP grandes,AR@100,Precisión,Recall,F1,Umbral (de val),Entrenamiento (min),Épocas,Mejor época,Latencia (ms/img),FPS,Parámetros (M),Pesos (MB),GPU pico (MB)
+CNN prueba,0.000,0.000,0.000,0.000,0.000,0.000,0.006,0.000,0.000,0.000,0.234,0.1,2,1,25.8,38.7,0.41,1.6,234
+YOLO prueba,0.006,0.010,0.007,0.000,0.019,0.006,0.048,0.079,0.062,0.070,0.448,0.3,2,2,17.7,56.5,11.15,21.4,660
+Faster prueba,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.020,0.4,2,1,103.2,9.7,19.09,73.0,530

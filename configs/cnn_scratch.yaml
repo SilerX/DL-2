@@ -1,0 +1,49 @@
+# CNN propia desde cero: FCOS ligero con Focal + Smooth L1. Cada null es una decision pendiente.
+name: cnn_scratch
+data: data/fjordfish
+seed: 0
+model:
+  kind: custom_cnn
+  params:
+    stage_channels: null   # canales por etapa; cada etapa reduce a la mitad, ej. largo 5 llega a stride 32
+    stage_blocks: null     # bloques por etapa
+    block: null            # plain | residual
+    norm: null             # batch | group
+    fpn_channels: null
+    fpn_from_stage: null   # indice de la primera etapa usada: 2 equivale a stride 8
+    fpn_extra_levels: null # niveles sobre la ultima etapa
+    head_convs: null       # convoluciones en cada torre de la cabeza
+    size_ranges: null      # rango de tamanio por nivel, ej. [[0, 64], [64, 128], ...]
+    center_radius: null    # 0 = toda la caja; >0 = muestreo central en unidades de stride
+    use_centerness: null
+    focal_alpha: null
+    focal_gamma: null
+    smooth_l1_beta: null
+    cls_weight: null
+    box_weight: null
+    min_size: null         # resolucion de entrada
+    max_size: null
+    nms_iou: null
+training:
+  batch: null
+  accumulate: null
+  workers: 4
+  grad_clip: null    # 0 = sin recorte
+  patience: null     # 0 = sin detencion temprana
+  augment:
+    hflip_p: null
+    vflip_p: null
+    color_jitter: null  # [brillo, contraste, saturacion, tono], o []
+    zoom_out_p: null
+    zoom_out_range: null  # [min, max]; borrar esta linea si zoom_out_p es 0
+    iou_crop_p: null
+phases:
+  - epochs: null
+    trainable_backbone_stages: 0  # sin efecto: la CNN propia entrena completa
+    train_fpn: true
+    train_rpn: true
+    optimizer: null     # sgd | adamw
+    lr: null
+    momentum: null      # solo sgd; borrar esta linea con adamw
+    weight_decay: null
+    scheduler: null     # none | cosine | multistep (requiere milestones y gamma)

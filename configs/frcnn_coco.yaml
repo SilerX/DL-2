@@ -1,0 +1,46 @@
+# Faster R-CNN con pesos COCO. Cada null es una decision pendiente.
+name: frcnn_coco
+data: data/fjordfish
+seed: 0
+model:
+  kind: faster_rcnn
+  backbone: resnet50_fpn
+  init: coco
+  min_size: 800
+  max_size: 1333
+  anchor_sizes: null # opcional; null deja los anchors de COCO
+training:
+  batch: 2          # batch 4 no cabe en 4 GB a 800/1333
+  accumulate: 2      # paso del optimizador con 4 imagenes
+  workers: 4
+  grad_clip: null    # 0 = sin recorte
+  patience: 4        # por fase; 0 = sin detencion temprana
+  augment:
+    hflip_p: null
+    vflip_p: null
+    color_jitter: null  # [brillo, contraste, saturacion, tono], o []
+    zoom_out_p: null
+    zoom_out_range: null  # [min, max]; borrar esta linea si zoom_out_p es 0
+    iou_crop_p: null
+# trainable_backbone_stages cuenta desde la etapa mas profunda: 0 = congelado, 1 = layer4, 2 = layer4 y layer3
+phases:
+  # Fase 1: backbone congelado y cabeza nueva
+  - epochs: 6
+    trainable_backbone_stages: 0
+    train_fpn: null
+    train_rpn: null
+    optimizer: sgd
+    lr: 0.005
+    momentum: null
+    weight_decay: null
+    scheduler: null     # none | cosine | multistep (requiere milestones y gamma)
+  # Fase 2: descongelar las ultimas capas con lr bajo
+  - epochs: 14
+    trainable_backbone_stages: 2   # layer4 y layer3
+    train_fpn: null
+    train_rpn: null
+    optimizer: sgd
+    lr: 0.0005
+    momentum: null
+    weight_decay: null
+    scheduler: null

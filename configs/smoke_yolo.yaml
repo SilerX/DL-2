@@ -1,0 +1,16 @@
+# SOLO prueba de flujo: valores minimos para comprobar que el codigo corre. No es una decision de diseno.
+name: smoke_yolo
+init: coco
+model: yolov8s.pt
+data: data/smoke
+seed: 0
+train_args:
+  imgsz: 320
+  batch: 4
+  workers: 0
+  amp: false
+  plots: false
+  verbose: false
+phases:
+  - {freeze: 10, epochs: 1, lr0: 0.0001}
+  - {freeze: 7, epochs: 1, lr0: 0.00001}

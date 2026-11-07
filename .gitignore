@@ -1,0 +1,20 @@
+# Entorno
+.venv/
+__pycache__/
+*.pyc
+
+# Datos y pesos: se regeneran con los comandos del README
+data/*
+!data/fjordfish/
+data/fjordfish/*
+!data/fjordfish/splits/
+!data/fjordfish/manifest.json
+weights/
+*.pt
+*.pth
+
+# Registros de consola
+*.log
+
+# Entrenamiento en curso: se agrega cuando termine
+runs/yolo_coco/

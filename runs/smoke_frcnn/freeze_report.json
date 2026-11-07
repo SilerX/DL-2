@@ -1,0 +1,172 @@
+[
+ {
+  "phase": 0,
+  "groups": {
+   "backbone/0": {
+    "params": 464,
+    "trainable": 0
+   },
+   "backbone/1": {
+    "params": 464,
+    "trainable": 0
+   },
+   "backbone/2": {
+    "params": 3440,
+    "trainable": 0
+   },
+   "backbone/3": {
+    "params": 4440,
+    "trainable": 0
+   },
+   "backbone/4": {
+    "params": 10328,
+    "trainable": 0
+   },
+   "backbone/5": {
+    "params": 20992,
+    "trainable": 0
+   },
+   "backbone/6": {
+    "params": 20992,
+    "trainable": 0
+   },
+   "backbone/7": {
+    "params": 32080,
+    "trainable": 0
+   },
+   "backbone/8": {
+    "params": 34760,
+    "trainable": 0
+   },
+   "backbone/9": {
+    "params": 31992,
+    "trainable": 0
+   },
+   "backbone/10": {
+    "params": 31992,
+    "trainable": 0
+   },
+   "backbone/11": {
+    "params": 214424,
+    "trainable": 0
+   },
+   "backbone/12": {
+    "params": 386120,
+    "trainable": 0
+   },
+   "backbone/13": {
+    "params": 429224,
+    "trainable": 0
+   },
+   "backbone/14": {
+    "params": 797360,
+    "trainable": 0
+   },
+   "backbone/15": {
+    "params": 797360,
+    "trainable": 797360
+   },
+   "backbone/16": {
+    "params": 155520,
+    "trainable": 155520
+   },
+   "fpn": {
+    "params": 1467392,
+    "trainable": 0
+   },
+   "rpn": {
+    "params": 609355,
+    "trainable": 609355
+   },
+   "roi_heads": {
+    "params": 14044305,
+    "trainable": 14044305
+   }
+  }
+ },
+ {
+  "phase": 1,
+  "groups": {
+   "backbone/0": {
+    "params": 464,
+    "trainable": 0
+   },
+   "backbone/1": {
+    "params": 464,
+    "trainable": 0
+   },
+   "backbone/2": {
+    "params": 3440,
+    "trainable": 0
+   },
+   "backbone/3": {
+    "params": 4440,
+    "trainable": 0
+   },
+   "backbone/4": {
+    "params": 10328,
+    "trainable": 0
+   },
+   "backbone/5": {
+    "params": 20992,
+    "trainable": 0
+   },
+   "backbone/6": {
+    "params": 20992,
+    "trainable": 0
+   },
+   "backbone/7": {
+    "params": 32080,
+    "trainable": 0
+   },
+   "backbone/8": {
+    "params": 34760,
+    "trainable": 0
+   },
+   "backbone/9": {
+    "params": 31992,
+    "trainable": 0
+   },
+   "backbone/10": {
+    "params": 31992,
+    "trainable": 0
+   },
+   "backbone/11": {
+    "params": 214424,
+    "trainable": 0
+   },
+   "backbone/12": {
+    "params": 386120,
+    "trainable": 386120
+   },
+   "backbone/13": {
+    "params": 429224,
+    "trainable": 429224
+   },
+   "backbone/14": {
+    "params": 797360,
+    "trainable": 797360
+   },
+   "backbone/15": {
+    "params": 797360,
+    "trainable": 797360
+   },
+   "backbone/16": {
+    "params": 155520,
+    "trainable": 155520
+   },
+   "fpn": {
+    "params": 1467392,
+    "trainable": 1467392
+   },
+   "rpn": {
+    "params": 609355,
+    "trainable": 609355
+   },
+   "roi_heads": {
+    "params": 14044305,
+    "trainable": 14044305
+   }
+  }
+ }
+]

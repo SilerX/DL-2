@@ -1,0 +1,23 @@
+{
+ "val": {
+  "total": 301,
+  "histograma_distancia": {
+   "16": 110,
+   "18": 147,
+   "20": 44
+  }
+ },
+ "test": {
+  "total": 300,
+  "histograma_distancia": {
+   "16": 90,
+   "18": 165,
+   "20": 44,
+   "22": 1
+  }
+ },
+ "ids_consecutivos": {
+  "pares": 3001,
+  "en_particiones_distintas": 499
+ }
+}

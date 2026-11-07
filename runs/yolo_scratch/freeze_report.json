@@ -1,0 +1,109 @@
+[
+ {
+  "phase": 0,
+  "layers": [
+   {
+    "index": 0,
+    "params": 464,
+    "trainable": 464,
+    "type": "Conv"
+   },
+   {
+    "index": 1,
+    "params": 4672,
+    "trainable": 4672,
+    "type": "Conv"
+   },
+   {
+    "index": 2,
+    "params": 7360,
+    "trainable": 7360,
+    "type": "C2f"
+   },
+   {
+    "index": 3,
+    "params": 18560,
+    "trainable": 18560,
+    "type": "Conv"
+   },
+   {
+    "index": 4,
+    "params": 49664,
+    "trainable": 49664,
+    "type": "C2f"
+   },
+   {
+    "index": 5,
+    "params": 73984,
+    "trainable": 73984,
+    "type": "Conv"
+   },
+   {
+    "index": 6,
+    "params": 197632,
+    "trainable": 197632,
+    "type": "C2f"
+   },
+   {
+    "index": 7,
+    "params": 295424,
+    "trainable": 295424,
+    "type": "Conv"
+   },
+   {
+    "index": 8,
+    "params": 460288,
+    "trainable": 460288,
+    "type": "C2f"
+   },
+   {
+    "index": 9,
+    "params": 164608,
+    "trainable": 164608,
+    "type": "SPPF"
+   },
+   {
+    "index": 12,
+    "params": 148224,
+    "trainable": 148224,
+    "type": "C2f"
+   },
+   {
+    "index": 15,
+    "params": 37248,
+    "trainable": 37248,
+    "type": "C2f"
+   },
+   {
+    "index": 16,
+    "params": 36992,
+    "trainable": 36992,
+    "type": "Conv"
+   },
+   {
+    "index": 18,
+    "params": 123648,
+    "trainable": 123648,
+    "type": "C2f"
+   },
+   {
+    "index": 19,
+    "params": 147712,
+    "trainable": 147712,
+    "type": "Conv"
+   },
+   {
+    "index": 21,
+    "params": 493056,
+    "trainable": 493056,
+    "type": "C2f"
+   },
+   {
+    "index": 22,
+    "params": 754432,
+    "trainable": 754416,
+    "type": "Detect"
+   }
+  ]
+ }
+]

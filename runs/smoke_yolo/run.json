@@ -1,0 +1,40 @@
+{
+ "name": "smoke_yolo",
+ "framework": "ultralytics",
+ "init": "coco",
+ "model": "yolov8s.pt",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\smoke_yolo\\best.pt",
+ "imgsz": 320,
+ "data": "data/smoke",
+ "train_seconds": 15.2921867999994,
+ "best_epoch": 2,
+ "epochs_run": 2,
+ "peak_gpu_mb": 660.0,
+ "config": {
+  "name": "smoke_yolo",
+  "init": "coco",
+  "model": "yolov8s.pt",
+  "data": "data/smoke",
+  "seed": 0,
+  "train_args": {
+   "imgsz": 320,
+   "batch": 4,
+   "workers": 0,
+   "amp": false,
+   "plots": false,
+   "verbose": false
+  },
+  "phases": [
+   {
+    "freeze": 10,
+    "epochs": 1,
+    "lr0": 0.0001
+   },
+   {
+    "freeze": 7,
+    "epochs": 1,
+    "lr0": 1e-05
+   }
+  ]
+ }
+}

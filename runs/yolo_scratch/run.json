@@ -1,0 +1,32 @@
+{
+ "name": "yolo_scratch",
+ "framework": "ultralytics",
+ "init": "scratch",
+ "model": "yolov8n.yaml",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\yolo_scratch\\best.pt",
+ "imgsz": 640,
+ "data": "data/fjordfish",
+ "train_seconds": 11546.4513658,
+ "best_epoch": 111,
+ "epochs_run": 136,
+ "peak_gpu_mb": 3586.0,
+ "config": {
+  "name": "yolo_scratch",
+  "init": "scratch",
+  "model": "yolov8n.yaml",
+  "data": "data/fjordfish",
+  "seed": 0,
+  "train_args": {
+   "epochs": 150,
+   "patience": 25,
+   "warmup_epochs": 3,
+   "imgsz": 640,
+   "batch": 16,
+   "workers": 4,
+   "amp": false,
+   "optimizer": "SGD",
+   "cos_lr": true,
+   "mosaic": 0.5
+  }
+ }
+}

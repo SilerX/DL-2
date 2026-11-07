@@ -1,0 +1,20 @@
+# SOLO prueba de flujo: valores minimos para comprobar que el codigo corre. No es una decision de diseno.
+name: smoke_frcnn
+data: data/smoke
+seed: 0
+model:
+  kind: faster_rcnn
+  backbone: mobilenet_v3_large_fpn
+  init: scratch
+  min_size: 320
+  max_size: 640
+training:
+  batch: 2
+  accumulate: 1
+  workers: 0
+  grad_clip: 0
+  patience: 0
+  augment: {hflip_p: 0.5}
+phases:
+  - {epochs: 1, trainable_backbone_stages: 2, train_fpn: false, train_rpn: true, optimizer: sgd, lr: 0.001, momentum: 0.9, weight_decay: 0.0001, scheduler: none}
+  - {epochs: 1, trainable_backbone_stages: 5, train_fpn: true, train_rpn: true, optimizer: adamw, lr: 0.0001, weight_decay: 0.0001, scheduler: cosine}

@@ -1,0 +1,18 @@
+# YOLO desde cero. Decision del grupo: configuracion estandar de ultralytics salvo lo indicado aqui.
+# Cada null es una decision pendiente.
+name: yolo_scratch
+init: scratch
+model: yolov8n.yaml
+data: data/fjordfish
+seed: 0
+train_args:
+  epochs: 150
+  patience: 25
+  warmup_epochs: 3
+  imgsz: 640
+  batch: 16
+  workers: 4
+  amp: false         # restriccion tecnica de la GTX 1650
+  optimizer: SGD
+  cos_lr: true
+  mosaic: 0.5

@@ -1,0 +1,4 @@
+ultralytics==8.4.202
+pycocotools
+imagehash
+pyyaml

@@ -1,0 +1,35 @@
+# SOLO prueba de flujo: valores minimos para comprobar que el codigo corre. No es una decision de diseno.
+name: smoke_cnn
+data: data/smoke
+seed: 0
+model:
+  kind: custom_cnn
+  params:
+    stage_channels: [16, 32, 64, 64, 64]
+    stage_blocks: [1, 1, 1, 1, 1]
+    block: residual
+    norm: group
+    fpn_channels: 32
+    fpn_from_stage: 2
+    fpn_extra_levels: 0
+    head_convs: 1
+    size_ranges: [[0, 64], [64, 128], [128, 100000]]
+    center_radius: 1.5
+    use_centerness: true
+    focal_alpha: 0.25
+    focal_gamma: 2.0
+    smooth_l1_beta: 0.1
+    cls_weight: 1.0
+    box_weight: 1.0
+    min_size: 320
+    max_size: 480
+    nms_iou: 0.5
+training:
+  batch: 4
+  accumulate: 1
+  workers: 0
+  grad_clip: 0
+  patience: 0
+  augment: {hflip_p: 0.5}
+phases:
+  - {epochs: 2, trainable_backbone_stages: 0, train_fpn: true, train_rpn: true, optimizer: adamw, lr: 0.001, weight_decay: 0.0001, scheduler: cosine}

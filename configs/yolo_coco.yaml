@@ -1,0 +1,19 @@
+# YOLO con pesos COCO.
+name: yolo_coco
+init: coco
+model: yolov8s.pt
+data: data/fjordfish
+seed: 0
+train_args:
+  patience: 15       # por fase
+  imgsz: 640
+  batch: 16         # ambas fases; con freeze=4 desborda los 4 GB (4912 MB medidos)
+  workers: 4
+  amp: false         # restriccion tecnica de la GTX 1650
+  optimizer: AdamW
+  mosaic: 0.5
+phases:
+  # Fase 1: backbone congelado (capas 0-9 de YOLOv8) y cabeza nueva
+  - {freeze: 10, epochs: 20, lr0: 0.0001}
+  # Fase 2: descongelar las capas 4-9 del backbone con lr bajo
+  - {freeze: 4, epochs: 30, lr0: 0.00005}

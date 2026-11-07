@@ -1,0 +1,6 @@
+caso,resultado
+yolo 8 16,RESULT {"s_per_image": 0.03945300416666653, "peak_mb": 3568.0}
+yolo 6 16,RESULT {"s_per_image": 0.04693797395833332, "peak_mb": 3974.0}
+yolo 4 16,RESULT {"s_per_image": 0.14464288958333338, "peak_mb": 4912.0}
+yolo 6 8,RESULT {"s_per_image": 0.05314959583333329, "peak_mb": 2356.0}
+yolo 4 8,RESULT {"s_per_image": 0.06050409166666645, "peak_mb": 2774.0}

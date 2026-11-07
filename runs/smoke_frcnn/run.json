@@ -1,0 +1,63 @@
+{
+ "name": "smoke_frcnn",
+ "framework": "torch",
+ "model": {
+  "kind": "faster_rcnn",
+  "backbone": "mobilenet_v3_large_fpn",
+  "init": "scratch",
+  "min_size": 320,
+  "max_size": 640
+ },
+ "nc": 28,
+ "data": "data/smoke",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\smoke_frcnn\\best.pt",
+ "config": {
+  "name": "smoke_frcnn",
+  "data": "data/smoke",
+  "seed": 0,
+  "model": {
+   "kind": "faster_rcnn",
+   "backbone": "mobilenet_v3_large_fpn",
+   "init": "scratch",
+   "min_size": 320,
+   "max_size": 640
+  },
+  "training": {
+   "batch": 2,
+   "accumulate": 1,
+   "workers": 0,
+   "grad_clip": 0,
+   "patience": 0,
+   "augment": {
+    "hflip_p": 0.5
+   }
+  },
+  "phases": [
+   {
+    "epochs": 1,
+    "trainable_backbone_stages": 2,
+    "train_fpn": false,
+    "train_rpn": true,
+    "optimizer": "sgd",
+    "lr": 0.001,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "scheduler": "none"
+   },
+   {
+    "epochs": 1,
+    "trainable_backbone_stages": 5,
+    "train_fpn": true,
+    "train_rpn": true,
+    "optimizer": "adamw",
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "scheduler": "cosine"
+   }
+  ]
+ },
+ "train_seconds": 23.924912000000404,
+ "best_epoch": 1,
+ "epochs_run": 2,
+ "peak_gpu_mb": 530.0
+}
