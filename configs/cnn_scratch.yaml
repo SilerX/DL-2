@@ -1,4 +1,4 @@
-# CNN propia desde cero: FCOS con backbone ResNet-50 (He init). Cada null es una decision pendiente.
+# CNN propia desde cero: FCOS con backbone ResNet-50 (He init).
 name: cnn_scratch
 data: data/fjordfish
 seed: 0
@@ -22,12 +22,12 @@ model:
     box_loss: giou
     cls_weight: 1.0
     box_weight: 1.0
-    min_size: null         # regla del grupo: 800; 640 solo si a 800 no cabe ni batch 1 en 4 GB
-    max_size: null         # 1333 (con 640: 1066, misma proporcion)
+    min_size: 800          # regla del grupo: 800; 640 solo si a 800 no cabe ni batch 1 en 4 GB
+    max_size: 1333         # 1333 (con 640: 1066, misma proporcion)
     nms_iou: 0.6
 training:
-  batch: null              # mayor batch que quepa entre 1, 2, 4 y 8
-  accumulate: null         # 16 / batch: lote efectivo 16 con lr 0.01
+  batch: 1                 # mayor batch que quepa entre 1, 2, 4 y 8 (artifacts/gpu_probe_fcos.csv)
+  accumulate: 16           # 16 / batch: lote efectivo 16 con lr 0.01
   workers: 4
   grad_clip: 0
   patience: 0

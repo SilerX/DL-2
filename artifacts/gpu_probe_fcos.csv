@@ -1,0 +1,5 @@
+caso,estado,s_por_imagen,gpu_pico_mb
+fcos 800 1333 1,ok,0.6620,3642
+fcos 800 1333 2,ok (supera 4 GB: usa memoria compartida),3.8225,5344
+fcos 800 1333 4,no medido (batch 2 ya supera 4 GB),,
+fcos 800 1333 8,no medido (batch 2 ya supera 4 GB),,
