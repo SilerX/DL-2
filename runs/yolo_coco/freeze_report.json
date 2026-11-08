@@ -1,0 +1,216 @@
+[
+ {
+  "phase": 0,
+  "layers": [
+   {
+    "index": 0,
+    "params": 928,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 1,
+    "params": 18560,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 2,
+    "params": 29056,
+    "trainable": 0,
+    "type": "C2f"
+   },
+   {
+    "index": 3,
+    "params": 73984,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 4,
+    "params": 197632,
+    "trainable": 0,
+    "type": "C2f"
+   },
+   {
+    "index": 5,
+    "params": 295424,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 6,
+    "params": 788480,
+    "trainable": 0,
+    "type": "C2f"
+   },
+   {
+    "index": 7,
+    "params": 1180672,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 8,
+    "params": 1838080,
+    "trainable": 0,
+    "type": "C2f"
+   },
+   {
+    "index": 9,
+    "params": 656896,
+    "trainable": 0,
+    "type": "SPPF"
+   },
+   {
+    "index": 12,
+    "params": 591360,
+    "trainable": 591360,
+    "type": "C2f"
+   },
+   {
+    "index": 15,
+    "params": 148224,
+    "trainable": 148224,
+    "type": "C2f"
+   },
+   {
+    "index": 16,
+    "params": 147712,
+    "trainable": 147712,
+    "type": "Conv"
+   },
+   {
+    "index": 18,
+    "params": 493056,
+    "trainable": 493056,
+    "type": "C2f"
+   },
+   {
+    "index": 19,
+    "params": 590336,
+    "trainable": 590336,
+    "type": "Conv"
+   },
+   {
+    "index": 21,
+    "params": 1969152,
+    "trainable": 1969152,
+    "type": "C2f"
+   },
+   {
+    "index": 22,
+    "params": 2122240,
+    "trainable": 2122224,
+    "type": "Detect"
+   }
+  ]
+ },
+ {
+  "phase": 1,
+  "layers": [
+   {
+    "index": 0,
+    "params": 928,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 1,
+    "params": 18560,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 2,
+    "params": 29056,
+    "trainable": 0,
+    "type": "C2f"
+   },
+   {
+    "index": 3,
+    "params": 73984,
+    "trainable": 0,
+    "type": "Conv"
+   },
+   {
+    "index": 4,
+    "params": 197632,
+    "trainable": 197632,
+    "type": "C2f"
+   },
+   {
+    "index": 5,
+    "params": 295424,
+    "trainable": 295424,
+    "type": "Conv"
+   },
+   {
+    "index": 6,
+    "params": 788480,
+    "trainable": 788480,
+    "type": "C2f"
+   },
+   {
+    "index": 7,
+    "params": 1180672,
+    "trainable": 1180672,
+    "type": "Conv"
+   },
+   {
+    "index": 8,
+    "params": 1838080,
+    "trainable": 1838080,
+    "type": "C2f"
+   },
+   {
+    "index": 9,
+    "params": 656896,
+    "trainable": 656896,
+    "type": "SPPF"
+   },
+   {
+    "index": 12,
+    "params": 591360,
+    "trainable": 591360,
+    "type": "C2f"
+   },
+   {
+    "index": 15,
+    "params": 148224,
+    "trainable": 148224,
+    "type": "C2f"
+   },
+   {
+    "index": 16,
+    "params": 147712,
+    "trainable": 147712,
+    "type": "Conv"
+   },
+   {
+    "index": 18,
+    "params": 493056,
+    "trainable": 493056,
+    "type": "C2f"
+   },
+   {
+    "index": 19,
+    "params": 590336,
+    "trainable": 590336,
+    "type": "Conv"
+   },
+   {
+    "index": 21,
+    "params": 1969152,
+    "trainable": 1969152,
+    "type": "C2f"
+   },
+   {
+    "index": 22,
+    "params": 2122240,
+    "trainable": 2122224,
+    "type": "Detect"
+   }
+  ]
+ }
+]

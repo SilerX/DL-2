@@ -1,0 +1,41 @@
+{
+ "name": "yolo_coco",
+ "framework": "ultralytics",
+ "init": "coco",
+ "model": "yolov8s.pt",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\yolo_coco\\best.pt",
+ "imgsz": 640,
+ "data": "data/fjordfish",
+ "train_seconds": 14700.2196691,
+ "best_epoch": 47,
+ "epochs_run": 50,
+ "peak_gpu_mb": 4604.0,
+ "config": {
+  "name": "yolo_coco",
+  "init": "coco",
+  "model": "yolov8s.pt",
+  "data": "data/fjordfish",
+  "seed": 0,
+  "train_args": {
+   "patience": 15,
+   "imgsz": 640,
+   "batch": 16,
+   "workers": 4,
+   "amp": false,
+   "optimizer": "AdamW",
+   "mosaic": 0.5
+  },
+  "phases": [
+   {
+    "freeze": 10,
+    "epochs": 20,
+    "lr0": 0.0001
+   },
+   {
+    "freeze": 4,
+    "epochs": 30,
+    "lr0": 5e-05
+   }
+  ]
+ }
+}

@@ -17,4 +17,4 @@ weights/
 *.log
 
 # Entrenamiento en curso: se agrega cuando termine
-runs/yolo_coco/
+runs/frcnn_coco/
