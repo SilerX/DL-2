@@ -1,0 +1,75 @@
+{
+ "name": "frcnn_coco",
+ "framework": "torch",
+ "model": {
+  "kind": "faster_rcnn",
+  "backbone": "resnet50_fpn",
+  "init": "coco",
+  "min_size": 800,
+  "max_size": 1333,
+  "anchor_sizes": null
+ },
+ "nc": 16,
+ "data": "data/fjordfish",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\frcnn_coco\\best.pt",
+ "config": {
+  "name": "frcnn_coco",
+  "data": "data/fjordfish",
+  "seed": 0,
+  "model": {
+   "kind": "faster_rcnn",
+   "backbone": "resnet50_fpn",
+   "init": "coco",
+   "min_size": 800,
+   "max_size": 1333,
+   "anchor_sizes": null
+  },
+  "training": {
+   "batch": 2,
+   "accumulate": 2,
+   "workers": 4,
+   "grad_clip": 10,
+   "patience": 4,
+   "augment": {
+    "hflip_p": 0.5,
+    "vflip_p": 0,
+    "color_jitter": [
+     0.2,
+     0.2,
+     0.2,
+     0
+    ],
+    "zoom_out_p": 0,
+    "iou_crop_p": 0
+   }
+  },
+  "phases": [
+   {
+    "epochs": 6,
+    "trainable_backbone_stages": 0,
+    "train_fpn": true,
+    "train_rpn": true,
+    "optimizer": "sgd",
+    "lr": 0.005,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "scheduler": "cosine"
+   },
+   {
+    "epochs": 14,
+    "trainable_backbone_stages": 2,
+    "train_fpn": true,
+    "train_rpn": true,
+    "optimizer": "sgd",
+    "lr": 0.0005,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "scheduler": "cosine"
+   }
+  ]
+ },
+ "train_seconds": 33609.245686199996,
+ "best_epoch": 17,
+ "epochs_run": 20,
+ "peak_gpu_mb": 4980.0
+}

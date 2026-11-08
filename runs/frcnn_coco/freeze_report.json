@@ -1,0 +1,76 @@
+[
+ {
+  "phase": 0,
+  "groups": {
+   "backbone/conv1+bn1": {
+    "params": 9408,
+    "trainable": 0
+   },
+   "backbone/layer1": {
+    "params": 212992,
+    "trainable": 0
+   },
+   "backbone/layer2": {
+    "params": 1212416,
+    "trainable": 0
+   },
+   "backbone/layer3": {
+    "params": 7077888,
+    "trainable": 0
+   },
+   "backbone/layer4": {
+    "params": 14942208,
+    "trainable": 0
+   },
+   "fpn": {
+    "params": 3344384,
+    "trainable": 3344384
+   },
+   "rpn": {
+    "params": 593935,
+    "trainable": 593935
+   },
+   "roi_heads": {
+    "params": 13982805,
+    "trainable": 13982805
+   }
+  }
+ },
+ {
+  "phase": 1,
+  "groups": {
+   "backbone/conv1+bn1": {
+    "params": 9408,
+    "trainable": 0
+   },
+   "backbone/layer1": {
+    "params": 212992,
+    "trainable": 0
+   },
+   "backbone/layer2": {
+    "params": 1212416,
+    "trainable": 0
+   },
+   "backbone/layer3": {
+    "params": 7077888,
+    "trainable": 7077888
+   },
+   "backbone/layer4": {
+    "params": 14942208,
+    "trainable": 14942208
+   },
+   "fpn": {
+    "params": 3344384,
+    "trainable": 3344384
+   },
+   "rpn": {
+    "params": 593935,
+    "trainable": 593935
+   },
+   "roi_heads": {
+    "params": 13982805,
+    "trainable": 13982805
+   }
+  }
+ }
+]
