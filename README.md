@@ -25,7 +25,7 @@ Requiere PyTorch con CUDA (usado: torch 2.6.0+cu124, torchvision 0.21.0). La GTX
    - `python src/train_yolo.py --config configs/yolo_scratch.yaml`
    - `python src/train_yolo.py --config configs/yolo_coco.yaml`
    - `python src/train_torch.py --config configs/frcnn_coco.yaml`
-5. **Evaluar**: `python src/evaluate_run.py --run runs/<nombre> --data data/<nombre>`
+5. **Evaluar**: `python src/evaluate_run.py --run runs/<nombre> --data data/<nombre>`; al final, `python src/remeasure_latency.py --run runs/<nombre> --data data/<nombre>`
 6. **Comparar**: `python src/make_report.py --runs runs/a runs/b --labels "A" "B" --out results`
 
 ## Medición
@@ -35,7 +35,7 @@ Requiere PyTorch con CUDA (usado: torch 2.6.0+cu124, torchvision 0.21.0). La GTX
 - **Clases por caja**: todos los modelos pueden devolver una misma caja con más de una clase, como hacen `model.val()` de ultralytics y Faster R-CNN. `predict()` de ultralytics deja solo una, así que `src/predictors.py` lo ajusta.
 - **Máximo de detecciones**: 100 por imagen en todos los modelos.
 - **Tamaños pequeño/mediano/grande**: áreas COCO en píxeles, medidas sobre las imágenes ya reducidas.
-- **Latencia**: una imagen a la vez, incluye lectura, preproceso, red y postproceso; descarta 10 imágenes de calentamiento y mide 100.
+- **Latencia**: una imagen a la vez, incluye lectura, preproceso, red y postproceso; descarta 10 imágenes de calentamiento y mide 100. La tabla final usa `src/remeasure_latency.py`: con la GPU sin otros procesos, repite esa medición 3 veces y guarda la mediana (`latency_ms`), las repeticiones (`latency_ms_runs`) y la medición original de `evaluate_run.py` (`latency_ms_previous`) en `evaluation.json`.
 - **Tiempo de entrenamiento**: reloj total, incluida la validación por época.
 - **Selección del mejor modelo**: los modelos PyTorch usan mAP@0.5:0.95 en val; ultralytics usa su métrica `fitness`. La comparación final siempre usa el evaluador común.
 

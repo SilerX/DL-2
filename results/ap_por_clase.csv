@@ -1,0 +1,17 @@
+﻿clase,cajas_test,AP50 CNN propia (FCOS) desde cero,AP50 YOLOv8n desde cero,AP50 YOLOv8s COCO,AP50 Faster R-CNN COCO
+ballan,9,0.151,0.232,0.445,0.214
+brown_crab,12,0.000,0.000,0.054,0.014
+cod,30,0.169,0.305,0.587,0.508
+cod_yoy,18,0.006,0.005,0.008,0.046
+corkwing_female,46,0.168,0.542,0.606,0.580
+corkwing_male,138,0.710,0.855,0.868,0.808
+gadines_unknown,13,0.149,0.127,0.183,0.196
+goldsinny,191,0.183,0.218,0.482,0.493
+labrids_unknown,33,0.109,0.166,0.148,0.204
+otras_crustaceos,9,0.005,0.047,0.337,0.249
+otras_peces,18,0.057,0.076,0.316,0.071
+pollack,15,0.040,0.333,0.390,0.462
+rock_cook,18,0.015,0.604,0.680,0.375
+spiny_dogfish,45,0.172,0.483,0.704,0.606
+two_spot_goby,11,0.005,0.053,0.248,0.343
+whiting,9,0.047,0.229,0.880,0.319

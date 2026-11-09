@@ -16,5 +16,3 @@ weights/
 # Registros de consola
 *.log
 
-# Entrenamiento en curso: se agrega cuando termine
-runs/cnn_scratch/

@@ -1,0 +1,153 @@
+{
+ "name": "cnn_scratch",
+ "framework": "torch",
+ "model": {
+  "kind": "custom_cnn",
+  "params": {
+   "stage_channels": [
+    256,
+    512,
+    1024,
+    2048
+   ],
+   "stage_blocks": [
+    3,
+    4,
+    6,
+    3
+   ],
+   "block": "bottleneck",
+   "norm": "group",
+   "norm_groups": 32,
+   "fpn_channels": 256,
+   "fpn_from_stage": 1,
+   "fpn_extra_levels": 2,
+   "head_convs": 4,
+   "size_ranges": [
+    [
+     0,
+     64
+    ],
+    [
+     64,
+     128
+    ],
+    [
+     128,
+     256
+    ],
+    [
+     256,
+     512
+    ],
+    [
+     512,
+     100000
+    ]
+   ],
+   "center_radius": 0,
+   "use_centerness": true,
+   "focal_alpha": 0.25,
+   "focal_gamma": 2.0,
+   "box_loss": "giou",
+   "cls_weight": 1.0,
+   "box_weight": 1.0,
+   "min_size": 800,
+   "max_size": 1333,
+   "nms_iou": 0.6
+  }
+ },
+ "nc": 16,
+ "data": "data/fjordfish",
+ "weights": "D:\\Utilities\\Escritorio\\Deeplearning\\tarea2\\runs\\cnn_scratch\\best.pt",
+ "config": {
+  "name": "cnn_scratch",
+  "data": "data/fjordfish",
+  "seed": 0,
+  "model": {
+   "kind": "custom_cnn",
+   "params": {
+    "stage_channels": [
+     256,
+     512,
+     1024,
+     2048
+    ],
+    "stage_blocks": [
+     3,
+     4,
+     6,
+     3
+    ],
+    "block": "bottleneck",
+    "norm": "group",
+    "norm_groups": 32,
+    "fpn_channels": 256,
+    "fpn_from_stage": 1,
+    "fpn_extra_levels": 2,
+    "head_convs": 4,
+    "size_ranges": [
+     [
+      0,
+      64
+     ],
+     [
+      64,
+      128
+     ],
+     [
+      128,
+      256
+     ],
+     [
+      256,
+      512
+     ],
+     [
+      512,
+      100000
+     ]
+    ],
+    "center_radius": 0,
+    "use_centerness": true,
+    "focal_alpha": 0.25,
+    "focal_gamma": 2.0,
+    "box_loss": "giou",
+    "cls_weight": 1.0,
+    "box_weight": 1.0,
+    "min_size": 800,
+    "max_size": 1333,
+    "nms_iou": 0.6
+   }
+  },
+  "training": {
+   "batch": 1,
+   "accumulate": 16,
+   "workers": 4,
+   "grad_clip": 0,
+   "patience": 0,
+   "augment": {
+    "hflip_p": 0.5
+   }
+  },
+  "phases": [
+   {
+    "epochs": 24,
+    "trainable_backbone_stages": 0,
+    "train_fpn": true,
+    "train_rpn": true,
+    "optimizer": "sgd",
+    "lr": 0.01,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "scheduler": "cosine",
+    "warmup_iters": 500,
+    "warmup_factor": 0.333
+   }
+  ]
+ },
+ "train_seconds": 55773.2598257,
+ "best_epoch": 20,
+ "epochs_run": 24,
+ "peak_gpu_mb": 3660.0
+}
